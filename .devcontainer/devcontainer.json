@@ -1,0 +1,30 @@
+{
+  "name": "ElixirDev",
+  //"build":{
+  //  "dockerfile": "Dockerfile",
+  //  "context": ".."
+  //},
+
+  "dockerComposeFile": "docker-compose.yaml",
+  "service": "elixir-dev",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+
+  "forwardPorts": [],
+
+  "postCreateCommand": "mix do local.hex --force --if-missing, local.rebar --force --if-missing, deps.get",
+
+  "remoteUser": "elixir-dev",
+
+  "extensions": [
+	"editorconfig.editorconfig",
+	"github.vscode-pull-request-github",
+	"jakebecker.elixir-ls",
+	"redhat.vscode-yaml",
+	"ms-azuretools.vscode-docker"
+  ]
+}

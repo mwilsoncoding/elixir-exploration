@@ -1,0 +1,12 @@
+services:
+  elixir-dev:
+    volumes:
+      - ..:/workspace:cached
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    environment:
+      - MIX_ENV=dev
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
