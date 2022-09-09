@@ -49,6 +49,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          #      - uses: actions/cache@v3
+          #        with:
+          #          path: |
+          #            deps
+          #            _build
+          #            .mix
+          #            .hex
+          #            .cache
+          #          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          #          restore-keys: |
+          #            ${{ runner.os }}-mix-
       - run: |
           docker create --name tmp ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }}
-          docker container run --attach tmp ls -al
+          docker container run tmp ls -al
