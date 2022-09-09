@@ -19,13 +19,13 @@ jobs:
         id: buildx
         with:
           install: true
+          driver: docker
       - name: Build the Docker image
         run: |
           docker build . \
             --tag ghcr.io/mwilsoncoding/elixir_dev:${{github.sha}} \
             --build-arg MIX_ENV=dev \
-            --target builder \
-            --driver docker
+            --target builder
       - name: Debug
         run: |
           docker images
