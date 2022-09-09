@@ -42,3 +42,10 @@ jobs:
           build-args: |
             MIX_ENV=${{ matrix.mix-env }}
             ELIXIR_VERSION=${{ matrix.elixir-vsn }}
+  run:
+    runs-on: ubuntu-latest
+    needs: build
+    container: ${{ env.GHCR }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder:dev-elixir-1.14.0-${{ github.sha }}
+    steps:
+      - run: |
+        mix format --check-formatted
