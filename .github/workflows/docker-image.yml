@@ -48,8 +48,8 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
       volumes:
-        ${{ github.workspace }}:/workspace
+        - ${{ github.workspace }}:/workspace
     steps:
-      - run: |-
+      - run: |
           cd /workspace
           ls -al
