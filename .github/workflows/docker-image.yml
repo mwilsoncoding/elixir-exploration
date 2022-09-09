@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  IMAGE_NAME: elixir_dev
+  ELIXIR_VERSION: 1.13.4
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --tag elixir_dev:${GITHUB_SHA} --build-arg MIX_ENV=dev --target=builder
+    - name: Run the Dockre Image
+      run: docker run --rm dev:${GITHUB_SHA} mix format --check-formatted
