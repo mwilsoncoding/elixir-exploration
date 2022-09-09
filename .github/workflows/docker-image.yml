@@ -62,4 +62,4 @@ jobs:
           #          restore-keys: |
           #            ${{ runner.os }}-mix-
       - run: |
-          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }} ls -al /opt/app
+          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }} mix format --check-formatted
