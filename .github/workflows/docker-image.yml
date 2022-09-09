@@ -28,9 +28,10 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder-dev:${{ github.sha }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder-dev:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder-dev:latest
           context: .
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           build-args: |
             MIX_ENV=${{ env.MIX_ENV }}
             ELIXIR_VERSION=${{ env.ELIXIR_VERSION }}
