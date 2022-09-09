@@ -8,7 +8,7 @@ on:
 env:
   IMAGE_NAME: elixir_dev
   ELIXIR_VERSION: 1.13.4
-  OWNER: mwilsoncoding
+  REGISTRY: ghcr.io
   MIX_ENV: dev
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ env.OWNER }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder-dev:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder-dev:${{ github.sha }}
           context: .
           build-args: |
             MIX_ENV=${{ env.MIX_ENV }}
