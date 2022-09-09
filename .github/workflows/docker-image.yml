@@ -42,14 +42,12 @@ jobs:
   run:
     runs-on: ubuntu-latest
     needs: build
-    container:
-      image: ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }}
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-      volumes:
-        - ${{ github.workspace }}:/workspace
     steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          cd /workspace
-          ls -al
+          docker create tmp ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }}
