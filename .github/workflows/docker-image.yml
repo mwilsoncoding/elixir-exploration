@@ -1,8 +1,9 @@
+---
 name: CI
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
 
 env:
   IMAGE_NAME: elixir_dev
@@ -12,8 +13,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --tag elixir_dev:${GITHUB_SHA} --build-arg MIX_ENV=dev --target=builder
-    - name: Run the Dockre Image
-      run: docker run --rm dev:${GITHUB_SHA} mix format --check-formatted
+      - uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        id: buildx
+        with:
+          install: true
+      - name: Build the Docker image
+        run: |
+          docker build . \
+            --tag elixir_dev:${GITHUB_SHA} \
+            --build-arg MIX_ENV=dev \
+            --target builder \
+            -o /tmp/${IMAGE_NAME}-${GITHUB_SHA}.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: myimage
+          path: /tmp/${IMAGE_NAME}-${GITHUB_SHA}.tar
+  run:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${IMAGE_NAME}
+          path: /tmp
+      - name: Load and Run Docker image
+        run: |-
+          docker load --input /tmp/${IMAGE_NAME}-${GITHUB_SHA}.tar
+          docker run --rm dev:${GITHUB_SHA} mix format --check-formatted
