@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ env.GHCR }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder-${{ matrix.mix-env }}:elixir-${{ matrix.elixir-vsn }}-${{ github.sha }}
+          tags: ${{ env.GHCR }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }}
           context: .
           build-args: |
             MIX_ENV=${{ matrix.mix-env }}
