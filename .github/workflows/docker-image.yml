@@ -49,4 +49,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: docker run --rm gchr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }} mix format --check-formatted
+      - run: |
+          docker pull gchr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }}
+          docker run --rm gchr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }} mix format --check-formatted
