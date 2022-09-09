@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ env.OWNER }}/${{ env.IMAGE_NAME }}-builder-dev:${{ github.sha }}
+          tags: ${{ env.OWNER }}/${{ github.repository }}/${{ env.IMAGE_NAME }}-builder-dev:${{ github.sha }}
           context: .
           build-args: |
             MIX_ENV=${{ env.MIX_ENV }}
