@@ -8,10 +8,15 @@ on:
 env:
   IMAGE_NAME: elixir_dev
   ELIXIR_VERSION: 1.13.4
+  REGISTRY: ghcr.io
+  OWNER: mwilsoncoding
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    #    strategy:
+    #      matrix:
+    #        mix-env: [dev, test, prod]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
@@ -19,20 +24,14 @@ jobs:
         id: buildx
         with:
           install: true
-          driver: docker
-      - name: Build the Docker image
+      - name: Build and Push the Docker image
         run: |
           docker build . \
-            --tag ghcr.io/mwilsoncoding/elixir_dev:${{github.sha}} \
+          #            --tag ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}-builder-${{ matrix.mix-env }}:${{ github.sha }} \
+            --tag ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}-builder-dev:${{ github.sha }} \
+            #            --build-arg MIX_ENV=${{ matrix.mix-env }} \
             --build-arg MIX_ENV=dev \
             --target builder
       - name: Debug
-        run: |
-          docker images
-  run:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Debug
-        run: |
+        run: |-
           docker images
