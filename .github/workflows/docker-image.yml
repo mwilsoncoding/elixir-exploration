@@ -49,5 +49,4 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - run: |-
-          ls
-          mix format --check-formatted
+          ls -al
