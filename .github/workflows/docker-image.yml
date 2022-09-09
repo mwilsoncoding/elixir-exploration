@@ -25,12 +25,12 @@ jobs:
             --tag elixir_dev:${GITHUB_SHA} \
             --build-arg MIX_ENV=dev \
             --target builder \
-            -o /tmp/${IMAGE_NAME}-${GITHUB_SHA}.tar
+            -o /tmp/${{env.IMAGE_NAME}}-${GITHUB_SHA}.tar
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: myimage
-          path: /tmp/${IMAGE_NAME}-${GITHUB_SHA}.tar
+          path: /tmp/${{env.IMAGE_NAME}}-${GITHUB_SHA}.tar
   run:
     runs-on: ubuntu-latest
     needs: build
@@ -40,9 +40,9 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: ${IMAGE_NAME}
+          name: ${{env.IMAGE_NAME}}
           path: /tmp
       - name: Load and Run Docker image
         run: |-
-          docker load --input /tmp/${IMAGE_NAME}-${GITHUB_SHA}.tar
+          docker load --input /tmp/${{env.IMAGE_NAME}}-${GITHUB_SHA}.tar
           docker run --rm dev:${GITHUB_SHA} mix format --check-formatted
