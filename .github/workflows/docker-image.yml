@@ -25,12 +25,12 @@ jobs:
             --tag elixir_dev:${{github.sha}} \
             --build-arg MIX_ENV=dev \
             --target builder \
-            -o /tmp/${{env.IMAGE_NAME}}-${{github.sha}}.tar
+            -o ${{env.IMAGE_NAME}}-${{github.sha}}.tar
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: myimage
-          path: /tmp/${{env.IMAGE_NAME}}-${{github.sha}}.tar
+          path: ${{env.IMAGE_NAME}}-${{github.sha}}.tar
   run:
     runs-on: ubuntu-latest
     needs: build
@@ -41,8 +41,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{env.IMAGE_NAME}}
-          path: /tmp
+          path: .
       - name: Load and Run Docker image
         run: |-
-          docker load --input /tmp/${{env.IMAGE_NAME}}-${{github.sha}}.tar
-          docker run --rm dev:${{github.sha}} mix format --check-formatted
+          docker load --input ${{env.IMAGE_NAME}}-${{github.sha}}.tar
+          docker run --rm elixir_dev:${{github.sha}} mix format --check-formatted
