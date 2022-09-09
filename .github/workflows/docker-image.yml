@@ -26,6 +26,8 @@ jobs:
             --build-arg MIX_ENV=dev \
             --target builder \
             -o ${{env.IMAGE_NAME}}-${{github.sha}}.tar
+      - name: debug
+        run: ls
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
