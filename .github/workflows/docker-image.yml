@@ -29,9 +29,7 @@ jobs:
         with:
           push: true
           tags: ${{ env.OWNER }}/${{ env.IMAGE_NAME }}-builder-dev:${{ github.sha }}
-          build-args:
-            - MIX_ENV=${{ env.MIX_ENV }}
-            - ELIXIR_VERSION=${{ env.ELIXIR_VERSION }}
+          build-args: [ "MIX_ENV=${{ env.MIX_ENV }}", "ELIXIR_VERSION=${{ env.ELIXIR_VERSION }}" ]
       - name: Debug
         run: |-
           docker images
