@@ -47,7 +47,9 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+      volumes:
+        ${{ github.workspace }}:/workspace
     steps:
       - run: |-
-          cd /opt/app
-          mix format --check-formatted
+          cd /workspace
+          ls -al
