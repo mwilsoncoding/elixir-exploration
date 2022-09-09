@@ -50,4 +50,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          docker create tmp ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }}
+          docker create --name tmp ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }}
