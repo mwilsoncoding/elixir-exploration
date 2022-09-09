@@ -36,6 +36,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }}
           context: .
+          target: builder
           build-args: |
             MIX_ENV=${{ matrix.mix-env }}
             ELIXIR_VERSION=${{ matrix.elixir-vsn }}
