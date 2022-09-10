@@ -19,7 +19,8 @@ WORKDIR $APP_DIR
 RUN mix do local.hex --force --if-missing, \
     local.rebar --force --if-missing, \
     deps.get --only $MIX_ENV, \
-    release --overwrite
+    release --overwrite, \
+    dialyzer --plt
 
 # FROM us-docker.pkg.dev/$PROJECT_ID/$PATH/elixir:${ELIXIR_VERSION}-alpine
 FROM elixir:${ELIXIR_VERSION}-alpine

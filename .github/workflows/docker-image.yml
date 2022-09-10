@@ -10,7 +10,7 @@ jobs:
       matrix:
         mix-env:
           - dev
-            #          - test
+          - test
             #          - prod
         elixir-vsn:
           #          - 1.11.4
