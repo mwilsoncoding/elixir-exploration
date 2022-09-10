@@ -10,12 +10,9 @@ jobs:
       matrix:
         mix-env:
           - dev
-            #          - test
-            #          - prod
+          - test
+          - prod
         elixir-vsn:
-          #          - 1.11.4
-          #          - 1.12.3
-          #          - 1.13.4
           - 1.14.0
     steps:
       - uses: actions/checkout@v3
@@ -30,6 +27,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            deps
+            _build
+            .mix
+            .hex
+            .cache
+          key: elixir_dev-${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            elixir_dev-${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}
       - name: Build and Push the Docker image
         uses: docker/build-push-action@v3
         with:
@@ -40,9 +49,24 @@ jobs:
           build-args: |
             MIX_ENV=${{ matrix.mix-env }}
             ELIXIR_VERSION=${{ matrix.elixir-vsn }}
+      - name: Copy Docker Contents to Host
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          docker container create --name cache ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }}
+          docker container cp cache:/opt/app/deps .
+          docker container cp cache:/opt/app/_build .
+          docker container cp cache:/opt/app/.mix .
+          docker container cp cache:/opt/app/.hex .
+          docker container cp cache:/opt/app/.cache .
   check-formatted:
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      matrix:
+        mix-env:
+          - dev
+        elixir-vsn:
+          - 1.14.0
     steps:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -50,22 +74,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          #      - uses: actions/cache@v3
-          #        with:
-          #          path: |
-          #            deps
-          #            _build
-          #            .mix
-          #            .hex
-          #            .cache
-          #          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          #          restore-keys: |
-          #            ${{ runner.os }}-mix-
       - run: |
-          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }} mix format --check-formatted
+          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }} mix format --check-formatted
   dialyzer:
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      matrix:
+        mix-env:
+          - test
+        elixir-vsn:
+          - 1.14.0
     steps:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -73,22 +92,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          #      - uses: actions/cache@v3
-          #        with:
-          #          path: |
-          #            deps
-          #            _build
-          #            .mix
-          #            .hex
-          #            .cache
-          #          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          #          restore-keys: |
-          #            ${{ runner.os }}-mix-
       - run: |
-          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }} mix dialyzer
+          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }} mix dialyzer
   credo:
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      matrix:
+        mix-env:
+          - dev
+        elixir-vsn:
+          - 1.14.0
     steps:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -96,16 +110,5 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          #      - uses: actions/cache@v3
-          #        with:
-          #          path: |
-          #            deps
-          #            _build
-          #            .mix
-          #            .hex
-          #            .cache
-          #          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          #          restore-keys: |
-          #            ${{ runner.os }}-mix-
       - run: |
-          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:dev-elixir-1.14.0-${{ github.sha }} mix credo
+          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }} mix credo

@@ -20,6 +20,8 @@ RUN mix do local.hex --force --if-missing, \
     local.rebar --force --if-missing, \
     deps.get --only $MIX_ENV, \
     release --overwrite
+RUN mkdir -p deps .cache .hex
+RUN if [ "$MIX_ENV" == "test" ]; then mix dialyzer --plt; fi
 
 # FROM us-docker.pkg.dev/$PROJECT_ID/$PATH/elixir:${ELIXIR_VERSION}-alpine
 FROM elixir:${ELIXIR_VERSION}-alpine
