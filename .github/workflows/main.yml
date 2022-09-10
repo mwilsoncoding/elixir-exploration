@@ -1,13 +1,17 @@
 ---
-name: CI
-env:
-  ELIXIR_VERSION: 1.14.0
+name: Publish
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
 jobs:
-  publish:
+  build-publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mix-env:
+          - prod
+        elixir-vsn:
+          - 1.14.0
     steps:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
@@ -28,5 +32,5 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/elixir_dev:${{ github.sha }}
           context: .
           build-args: |
-            MIX_ENV=prod
-            ELIXIR_VERSION=${{ env.ELIXIR_VERSION }}
+            MIX_ENV=${{ matrix.mix-env }}
+            ELIXIR_VERSION=${{ matrix.elixir-vsn }}
