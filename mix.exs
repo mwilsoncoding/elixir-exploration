@@ -5,7 +5,7 @@ defmodule ElixirDev.MixProject do
     [
       app: :elixir_dev,
       version: "0.1.0",
-      elixir: "~> 1.13",
+      elixir: System.fetch_env!("ELIXIR_VERSION") |> String.trim(),
       start_permanent: Mix.env() == :prod,
       description: "Example Elixir Dev Environment",
       deps: deps(),
