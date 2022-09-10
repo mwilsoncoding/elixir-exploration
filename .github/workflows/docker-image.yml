@@ -40,9 +40,9 @@ jobs:
             .hex
             .cache
             mix.lock
-          key: elixir_dev-${{ matrix.mix_env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.ref_name }}
+          key: elixir_dev-${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.ref_name }}
           restore-keys: |
-            elixir_dev-${{ matrix.mix_env }}-elixir-${{ matrix.elixir-vsn }}
+            elixir_dev-${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}
       - name: Build and Push the Docker image
         uses: docker/build-push-action@v3
         with:
