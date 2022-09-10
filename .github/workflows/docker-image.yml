@@ -61,7 +61,6 @@ jobs:
           docker container cp cache:/opt/app/_build .
           docker container cp cache:/opt/app/.mix .
           docker container cp cache:/opt/app/.hex .
-          docker container cp cache:/opt/app/.cache .
           docker container cp cache:/opt/app/mix.lock .
   check-formatted:
     runs-on: ubuntu-latest
