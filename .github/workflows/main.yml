@@ -21,16 +21,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/cache@v3
-        id: cache
-        with:
-          path: |
-            deps
-            _build
-            .mix
-            .hex
-            .cache
-          key: elixir_dev-prod-elixir-${{ env.ELIXIR_VERSION }}
       - name: Build and Push the Docker image
         uses: docker/build-push-action@v3
         with:
