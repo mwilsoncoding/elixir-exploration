@@ -44,7 +44,7 @@ jobs:
             --tag ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }} \
             --target builder \
             --build-arg MIX_ENV=${{ matrix.mix-env }}
-          docker container create ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }}
+          docker container create --name cache ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }}
           docker container cp cache:/opt/app/deps .
           docker container cp cache:/opt/app/_build .
           docker container cp cache:/opt/app/.mix .
