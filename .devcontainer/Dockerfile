@@ -1,5 +1,6 @@
 # FROM us-docker.pkg.dev/$PROJECT_ID/$PATH/elixir:1.13.4-alpine
-FROM elixir:1.13.4-alpine
+ARG ELIXIR_VERSION=1.14.0
+FROM elixir:${ELIXIR_VERSION}-alpine
 
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
 # property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
