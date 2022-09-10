@@ -3,20 +3,20 @@ name: CI
 on:
   pull_request:
     branches: [main]
+strategy:
+  matrix:
+    mix-env:
+      - dev
+        #          - test
+        #          - prod
+    elixir-vsn:
+      #          - 1.11.4
+      #          - 1.12.3
+      #          - 1.13.4
+      - 1.14.0
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        mix-env:
-          - dev
-            #          - test
-            #          - prod
-        elixir-vsn:
-          #          - 1.11.4
-          #          - 1.12.3
-          #          - 1.13.4
-          - 1.14.0
     steps:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
