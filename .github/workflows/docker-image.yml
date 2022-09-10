@@ -13,9 +13,6 @@ jobs:
           - test
           - prod
         elixir-vsn:
-          - 1.11.4
-          - 1.12.3
-          - 1.13.4
           - 1.14.0
     steps:
       - uses: actions/checkout@v3
@@ -69,9 +66,6 @@ jobs:
         mix-env:
           - dev
         elixir-vsn:
-          - 1.11.4
-          - 1.12.3
-          - 1.13.4
           - 1.14.0
     steps:
       - name: Login to GitHub Container Registry
@@ -90,9 +84,6 @@ jobs:
         mix-env:
           - test
         elixir-vsn:
-          - 1.11.4
-          - 1.12.3
-          - 1.13.4
           - 1.14.0
     steps:
       - name: Login to GitHub Container Registry
@@ -111,9 +102,6 @@ jobs:
         mix-env:
           - dev
         elixir-vsn:
-          - 1.11.4
-          - 1.12.3
-          - 1.13.4
           - 1.14.0
     steps:
       - name: Login to GitHub Container Registry
