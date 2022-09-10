@@ -112,3 +112,21 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }} mix credo
+  unit:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        mix-env:
+          - test
+        elixir-vsn:
+          - 1.14.0
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          docker container run ghcr.io/${{ github.repository }}/elixir_dev-builder:${{ matrix.mix-env }}-elixir-${{ matrix.elixir-vsn }}-${{ github.sha }} mix test
